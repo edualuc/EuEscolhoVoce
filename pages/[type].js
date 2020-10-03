@@ -1,35 +1,18 @@
-import Head from 'next/head'
-import { useRouter } from 'next/router'
 import Link from 'next/link'
 import HtmlHeader from '../components/HtmlHeader/HtmlHeader'
 import Pokemon from '../components/Pokemon/Pokemon'
-import Bolsa from '../components/Bolsa/Bolsa'
+import Bag from '../components/Bag/Bag'
 import Footer from '../components/Footer/Footer'
 
-export default function Home() {
-  const { query } = useRouter()
-  const { type } = query
-  const title = "Lista de pokemons do tipo " + type
-  const pokemons = [
-    { 
-      name: "Buba",
-      description: "Descrição do pokemon",
-      power: "Força"
-    },{ 
-      name: "Charm",
-      description: "2Descrição",
-      power: "mais de 8000"
-    },
-  ]
-
+export default function Home(props) {
+  const { title, type, pokemons } = props
+  
   const bag = {
     itens: [
     ],
   }
 
   bag.itens[0] = pokemons[0]
-
-  console.log(bag);
 
   return (
     <div className="page">
@@ -42,14 +25,56 @@ export default function Home() {
       <div className="container">
         <main>
           <h3>Pokemon do tipo {type}</h3>
-          { pokemons && pokemons.map(pokemon => <Pokemon pokemon={pokemon} />)}
+          { pokemons && pokemons.map((pokemon, index) => <Pokemon key={index} pokemon={pokemon} />)}
         </main>
         <aside>
-          <Bolsa bag={bag} />
+          <Bag bag={bag} />
         </aside>
       </div>
       
       <Footer />
     </div>
   )
+}
+
+export async function getStaticProps ({params}) {
+  const type = params.type
+  
+  const title = "Lista de pokemons do tipo " + type
+  const pokemons = [
+    { 
+      name: "Buba",
+      description: "Descrição do pokemon",
+      power: "Força"
+    },{ 
+      name: "Charm",
+      description: "2Descrição",
+      power: "mais de 8000"
+    },
+  ]
+  return {
+    props: {
+      type,
+      pokemons,
+      title
+    }
+  }
+}
+
+export async function getStaticPaths () {
+  return {
+    paths: [
+      {
+        params: {
+          type: "agua"
+        }
+      },
+      {
+        params: {
+          type: "fogo"
+        }
+      }
+    ],
+    fallback: false,
+  }
 }
