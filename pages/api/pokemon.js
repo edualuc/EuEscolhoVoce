@@ -1,12 +1,10 @@
-export default async (req, res) => {
+import servicePokemon from '../../services/servicePokemon'
 
-  const response = await fetch('https://pokeapi.co/api/v2/type/fire')
-  const pokemonResponse = await response.json()
-  const pokemon = pokemonResponse && pokemonResponse.pokemon.map(type => ({
-    ...type
-  }))
+const fetchPokemon = async (req, res) => {
 
-  console.log(pokemon);
+  const pokemon = await servicePokemon()
+
   res.statusCode = 200
   res.json({ pokemon })
 }
+export default fetchPokemon

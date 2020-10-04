@@ -1,4 +1,6 @@
 import { useRouter } from 'next/router';
+import serviceTypes from '../services/serviceTypes'
+
 import ChoiceType from '../components/ChoiceType/ChoiceType'
 import Footer from '../components/Footer/Footer'
 import HtmlHeader from '../components/HtmlHeader/HtmlHeader'
@@ -30,9 +32,7 @@ export default function Home(props) {
 export async function getStaticProps () {
   const title = "Escolha o tipo do pokemon"
 
-  const response = await fetch(process.env.API_POKEMON_TYPES)
-  const typesResponse = await response.json()
-  const { types } = typesResponse
+  const types = await serviceTypes()
 
   return {
     props: {
