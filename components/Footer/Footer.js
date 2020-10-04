@@ -2,7 +2,7 @@
    footer: undefined
  }
 
-export default () => {
+const Footer = () => {
   const author = "Eduardo Amador Lucas"
   const linkGithub = "https://github.com/edualuc"
   return (
@@ -12,3 +12,4 @@ export default () => {
     </footer>
   )
 }
+export default Footer

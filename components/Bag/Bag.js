@@ -1,6 +1,6 @@
 import Pokemon from '../Pokemon/Pokemon.js'
 
-export default function ({bag}) {
+export default function Bag ({bag}) {
   return (
     <section className="bag">
       <h3>Bolsa de Pokemon</h3>

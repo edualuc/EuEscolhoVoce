@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import HtmlHeader from '../components/HtmlHeader/HtmlHeader'
 import Pokemon from '../components/Pokemon/Pokemon'
 import Bag from '../components/Bag/Bag'
@@ -6,6 +7,12 @@ import Footer from '../components/Footer/Footer'
 
 export default function Home(props) {
   const { title, type, pokemons } = props
+
+  const {isFallback} = useRouter();
+
+  if (isFallback) {
+    return <>Carregando...</>
+  }
   
   const bag = {
     itens: [
@@ -38,7 +45,8 @@ export default function Home(props) {
 }
 
 export async function getStaticProps ({params}) {
-  const type = params.type
+  const { typeParams } = params
+  const type = typeParams || '/agua2'
   
   const title = "Lista de pokemons do tipo " + type
   const pokemons = [
@@ -75,6 +83,6 @@ export async function getStaticPaths () {
         }
       }
     ],
-    fallback: false,
+    fallback: true,
   }
 }
