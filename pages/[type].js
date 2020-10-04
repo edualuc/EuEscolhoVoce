@@ -1,5 +1,8 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+
+import serviceTypePokemon from '../services/serviceTypePokemon'
+import servicePokemon from '../services/servicePokemon'
 import HtmlHeader from '../components/HtmlHeader/HtmlHeader'
 import Pokemon from '../components/Pokemon/Pokemon'
 import Bag from '../components/Bag/Bag'
@@ -44,22 +47,22 @@ export default function Home(props) {
   )
 }
 
-export async function getStaticProps ({params}) {
-  const { typeParams } = params
-  const type = typeParams || '/agua2'
+export async function getStaticProps (props) {
+  const type = props.params.type || "padrão"
   
   const title = "Lista de pokemons do tipo " + type
-  const pokemons = [
-    { 
-      name: "Buba",
-      description: "Descrição do pokemon",
-      power: "Força"
-    },{ 
-      name: "Charm",
-      description: "2Descrição",
-      power: "mais de 8000"
-    },
-  ]
+  const listPokemon = await serviceTypePokemon(type)
+
+  const pokemons = [];
+  for ( const onePokemon of listPokemon.reduce((acc, pokemon) => (acc.length > 5? acc : [...acc, pokemon]), []) ) {
+    if (onePokemon.pokemon && onePokemon.pokemon.name) {
+      pokemons.push(await servicePokemon(onePokemon.pokemon.name))
+    }
+  }
+
+  console.log(pokemons && pokemons.map(pokemon => (Object.keys(pokemon))));
+
+
   return {
     props: {
       type,
@@ -74,12 +77,17 @@ export async function getStaticPaths () {
     paths: [
       {
         params: {
-          type: "agua"
+          type: "fire"
         }
       },
       {
         params: {
-          type: "fogo"
+          type: "water"
+        }
+      },
+      {
+        params: {
+          type: "normal"
         }
       }
     ],

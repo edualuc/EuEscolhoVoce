@@ -1,9 +1,8 @@
-const pokemonTypes = async () => {
-  const response = await fetch('https://pokeapi.co/api/v2/type/fire')
+const servicePokemon = async (namePokemon) => {
+  const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${namePokemon}`)
   const pokemonResponse = await response.json()
-  const pokemon = pokemonResponse && pokemonResponse.pokemon.map(type => ({
-    ...type
-  }))
+  const pokemon = {...pokemonResponse}
+  
   return pokemon
 }
-export default pokemonTypes
+export default servicePokemon
