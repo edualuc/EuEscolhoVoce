@@ -1,33 +1,109 @@
+import styled from 'styled-components'
+
+const SectionPokemon = styled.section`
+  flex: 1;
+  min-width: calc(${({ pictureWidth }) => pictureWidth}px * 2);
+  margin: ${({ theme }) => theme.margin.thin}px;
+`
+
+const PokemonBody = styled.div`
+  display: flex;
+  background-color: ${({ theme }) => theme.colors.background};
+  font-size: ${({ theme }) => theme.font.body}rem;
+  * > h2 {
+    font-size: ${({ theme }) => theme.font.title2}rem;
+  }
+`
+
+const PokemonFooter = styled.div`
+  background-color: ${({ theme }) => theme.colors.backgroundDark};
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  *:first-child {
+    width: 100px;
+    text-align: center;
+  };
+  *:last-child {
+    flex: 1;
+    text-align: center;
+  };
+`
+  
+  
+const PokemonPictureCol = styled.div`
+  flex: 0;
+  width: ${({ pictureWidth }) => pictureWidth}px;
+  height: ${({ pictureHeight }) => pictureHeight}px;
+`
+
+const PokemonInfoCol = styled.div`
+  flex: 1;
+  > h2 {
+    margin: 3px 0;
+  };
+  > ul {
+    margin: auto 0;
+  }
+`
+
+const PictureSprite = styled.img`
+`
+
+const Button = styled.div`
+  background-color: ${({ theme }) => theme.colors.primary};
+  color: ${({ theme }) => theme.colors.light};
+  width: 100%;
+  margin: 2px 8px 4px;
+  padding: 6px 4px;
+  border-radius: 4px;
+  :hover {
+    background-color: ${({ theme }) => theme.colors.secondary};
+    cursor: pointer;
+  }
+`
+
 export default function Pokemon ({pokemon}) {
-  console.log(pokemon.species);
-  console.log(pokemon.sprites);
+  const picture = { 
+    width: 96,
+    height: 96,
+  }
+  const keyImage = ['front_default' ]; // 'back_default',  back_shiny  front_shiny
   return (
-    <section className="pokemon">
-      <div>
-        {
-          pokemon.sprites && Object.keys(pokemon.sprites).map( key => (
-            pokemon.sprites[key] && <img src={pokemon.sprites[key]} alt={`Foto do ${pokemon.name} - ${key}`} />
-          ))
-        }
-      </div>
-      <h2>{pokemon.name}</h2>
-      <p><strong>abilities: </strong>{pokemon.abilities.length}</p>
-      <p><strong>base_experience: </strong>{pokemon.base_experience}</p>
-      <p><strong>forms: </strong>{pokemon.forms.length}</p>
-      <p><strong>game_indices: </strong>{pokemon.game_indices.length}</p>
-      <p><strong>height: </strong>{pokemon.height}</p>
-      <p><strong>held_items: </strong>{pokemon.held_items.length}</p>
-      <p><strong>id: </strong>{pokemon.id}</p>
-      <p><strong>is_default: </strong>{pokemon.is_default}</p>
-      <p><strong>location_area_encounters: </strong>{pokemon.location_area_encounters.length}</p>
-      <p><strong>moves: </strong>{pokemon.moves.length}</p>
-      <p><strong>name: </strong>{pokemon.name.length}</p>
-      <p><strong>order: </strong>{pokemon.order}</p>
-      <p><strong>species: </strong>{pokemon.species.length}</p>
-      <p><strong>sprites: </strong>{pokemon.sprites.length}</p>
-      <p><strong>stats: </strong>{pokemon.stats.length}</p>
-      <p><strong>types: </strong>{pokemon.types.length}</p>
-      <p><strong>weight: </strong>{pokemon.weight}</p>
-    </section>
+    <SectionPokemon pictureWidth={picture.width}>
+      <PokemonBody>
+        <PokemonPictureCol>
+          {
+            pokemon.sprites && keyImage.map( key =>{ 
+            return  (
+              pokemon.sprites[key] && <PictureSprite pictureWidth={picture.width} pictureHeight={picture.height} src={pokemon.sprites[key]} alt={`Foto do ${pokemon.name} - ${key}`} />
+            )})
+          }
+        </PokemonPictureCol>
+        <PokemonInfoCol>
+          <h2>#{pokemon.id} {pokemon.name}</h2>
+          <ul>
+            <li>{pokemon.abilities.length} habilidades</li>
+            {/* <li><strong>forms: </strong>{pokemon.forms.length}</li> */}
+            {/* <li><strong>game_indices: </strong>{pokemon.game_indices.length}</li> */}
+            <li>{pokemon.height} ft</li>
+            {/* <li><strong>held_items: </strong>{pokemon.held_items.length}</li> */}
+            {/* <li><strong>is_default: </strong>{pokemon.is_default}</li> */}
+            {/* <li><strong>location_area_encounters: </strong>{pokemon.location_area_encounters.length}</li> */}
+            {/* <li><strong>moves: </strong>{pokemon.moves.length}</li> */}
+            {/* <li><strong>name: </strong>{pokemon.name.length}</li> */}
+            {/* <li><strong>order: </strong>{pokemon.order}</li> */}
+            {/* <li><strong>species: </strong>{pokemon.species.length}</li> */}
+            {/* <li><strong>stats: </strong>{pokemon.stats.length}</li> */}
+            {/* <li><strong>types: </strong>{pokemon.types.length}</li> */}
+            <li>{pokemon.weight} oz</li>
+          </ul>
+        </PokemonInfoCol>
+      </PokemonBody>
+      <PokemonFooter>
+        <p><strong>POWER: </strong>{pokemon.base_experience}</p>
+        <Button>Eu escolho Você</Button>
+      </PokemonFooter>
+    </SectionPokemon>
   )
 }
