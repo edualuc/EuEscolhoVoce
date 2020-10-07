@@ -48,6 +48,7 @@ const Container = styled.div`
   justify-content: space-between;
   align-content: flex-start;
   flex-wrap: wrap;
+  flex-direction: row-reverse;
 `
 const Main = styled.main`
   background-color: ${({ theme }) => theme.colors.backgroundLight};
@@ -55,7 +56,7 @@ const Main = styled.main`
   margin: 0 ${({ theme }) => theme.margin.default}px;
   padding: 0 ${({ theme }) => theme.margin.thin}px;
   min-width: 280px;
-  flex: 1;
+  flex: 2;
 `
 const MainTitle = styled.h3`
   color: ${({ theme }) => theme.colors.primary};
@@ -68,10 +69,11 @@ const Aside = styled.aside`
   background-color: ${({ theme }) => theme.colors.primary};
   border-radius: ${({ theme }) => theme.border.radius}px;
   padding: 0 ${({ theme }) => theme.margin.thin}px;
-  min-width: 360px;
+  margin: 0 ${({ theme }) => theme.margin.thin}px;
+  min-width: 260px;
   height: min-content;
-  min-height: calc(100vh - 100px - ${({ theme }) => theme.margin.default}px);
-  flex: 0;
+  min-height: 250px;
+  flex: 1;
   color: ${({ theme }) => theme.colors.light};
   display: flex;
   justify-content: space-between;
@@ -93,7 +95,7 @@ function Home (props) {
   // }
 
   useEffect(() => {
-    props.setTheme(type)
+    props.setTheme(type.type)
   }, [type])
   
   const [bag, setBag] = useState([]);
@@ -121,8 +123,12 @@ function Home (props) {
         </HeaderBody>
       </Header>
       <Container>
+        <Aside>
+          <Bag bag={bag} removeBag={removeBagPokemon} />
+          <SummaryBag bag={bag} clearBag={cleanBagPokemon} />
+        </Aside>
         <Main>
-          <MainTitle>Pokemon do tipo {type}</MainTitle>
+          <MainTitle>Pokemon do tipo: {type.name}</MainTitle>
           <ContainerPokemon>
             { pokemons && pokemons.map((pokemon, index) => <Pokemon key={index} pokemon={pokemon} addBag={addBagPokemon} />)}
             { !pokemons 
@@ -130,10 +136,6 @@ function Home (props) {
               && <span>Não há pokemon para exibir.</span> }
           </ContainerPokemon>
         </Main>
-        <Aside>
-          <Bag bag={bag} removeBag={removeBagPokemon} />
-          <SummaryBag bag={bag} clearBag={cleanBagPokemon} />
-        </Aside>
       </Container>
       
       <Footer />
@@ -142,10 +144,12 @@ function Home (props) {
 }
 
 export async function getStaticProps (props) {
-  const type = props.params.type || "padrão"
+  const typeId = props.params.type || "padrão"
   
-  const title = "Lista de pokemons do tipo " + type
-  const listPokemon = await serviceTypePokemon(type)
+  const [type] = await serviceTypes(typeId)
+  
+  const title = "Lista de pokemons do tipo " + (type && type.name ? type.name : 'desconhecido')
+  const listPokemon = type && (await serviceTypePokemon(type.type)) || []
 
   const pokemons = [];
   for ( const onePokemon of listPokemon.reduce((acc, pokemon) => (process.env.NODE_ENV !== 'production' && acc.length >= 10? acc : [...acc, pokemon]), []) ) {
