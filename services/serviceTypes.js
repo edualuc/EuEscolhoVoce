@@ -1,15 +1,15 @@
-const serviceTypes = async () => {
+const serviceTypes = async (typeParam) => {
   // const response = await fetch("https://pokeapi.co/api/v2/type")
   // const typesResponse = await response.json()
   // const types = typesResponse && typesResponse.results &&  typesResponse.results.map(type => ({
   //   ...type,
   //   link: `/${type.name}`
   // }))
+  const types = getAllTypes().filter(type => {
+    return ((!typeParam && type.name) || (typeParam === type.type))
+  })
 
-  const types = getAllTypes().filter(type => (type.name))
-  console.log(types);
-
-  return types
+  return types ? types : [];
 }
 
 let getAllTypes = () => ([
