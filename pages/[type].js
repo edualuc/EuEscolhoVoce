@@ -147,7 +147,7 @@ export async function getStaticProps (props) {
   const listPokemon = await serviceTypePokemon(type)
 
   const pokemons = [];
-  for ( const onePokemon of listPokemon.reduce((acc, pokemon) => (acc.length >= 10? acc : [...acc, pokemon]), []) ) {
+  for ( const onePokemon of listPokemon.reduce((acc, pokemon) => (process.env.NODE_ENV !== 'production' && acc.length >= 10? acc : [...acc, pokemon]), []) ) {
     if (onePokemon.pokemon && onePokemon.pokemon.name) {
       let pokemonToInclude = await servicePokemon(onePokemon.pokemon.name);
       pokemonToInclude.power = pokemonToInclude.base_experience
