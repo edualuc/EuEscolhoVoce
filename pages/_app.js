@@ -5,7 +5,7 @@ const theme = {
   maxWidth: 1280,
   colors: {
     primary: '#A30C0C',
-    secondary: '#BF3C3C',
+    secondary: '#BD2D00',
     light: '#FFF',
     dark: '#444',
     background: '#F3F3F3',
@@ -13,8 +13,10 @@ const theme = {
     backgroundLight: '#FFF',
     header: {
       color1: '#D10202',
-      color2: '#BD2D00',
-      color3: '#F33A00',
+      color2: '#A30C0C',
+      color3: '#A30C0C',
+      color4: '#BD2D00',
+      color5: '#F33A00',
     }
   },
   margin: {

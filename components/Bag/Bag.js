@@ -1,13 +1,12 @@
-import Pokemon from '../Pokemon/Pokemon.js'
+import PokemonBag from '../PokemonBag/PokemonBag.js'
 
-export default function Bag ({bag}) {
+export default function Bag ({bag, removeBag}) {
   return (
-    <section className="bag">
+    <section>
       <h3>Bolsa de Pokemon</h3>
       {
-        bag && bag.itens && bag.itens.map((item, index) => <Pokemon key={index} pokemon={item} />)
+        bag && bag.map((pokemon, index) => <PokemonBag key={index} pokemon={pokemon} removeBag={removeBag} />)
       }
-      <button className="btn btn-primary">Confirmar Pokemon</button>
     </section>
   )
 }

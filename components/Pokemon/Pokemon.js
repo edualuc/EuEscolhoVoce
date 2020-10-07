@@ -1,5 +1,7 @@
 import styled from 'styled-components'
 
+import PokemonPictureCol from '../PokemonPictureCol/PokemonPictureCol'
+
 const SectionPokemon = styled.section`
   flex: 1;
   min-width: calc(${({ pictureWidth }) => pictureWidth}px * 2);
@@ -29,13 +31,6 @@ const PokemonFooter = styled.div`
     text-align: center;
   };
 `
-  
-  
-const PokemonPictureCol = styled.div`
-  flex: 0;
-  width: ${({ pictureWidth }) => pictureWidth}px;
-  height: ${({ pictureHeight }) => pictureHeight}px;
-`
 
 const PokemonInfoCol = styled.div`
   flex: 1;
@@ -45,9 +40,6 @@ const PokemonInfoCol = styled.div`
   > ul {
     margin: auto 0;
   }
-`
-
-const PictureSprite = styled.img`
 `
 
 const Button = styled.div`
@@ -63,7 +55,7 @@ const Button = styled.div`
   }
 `
 
-export default function Pokemon ({pokemon}) {
+export default function Pokemon ({pokemon, addBag}) {
   const picture = { 
     width: 96,
     height: 96,
@@ -72,14 +64,7 @@ export default function Pokemon ({pokemon}) {
   return (
     <SectionPokemon pictureWidth={picture.width}>
       <PokemonBody>
-        <PokemonPictureCol>
-          {
-            pokemon.sprites && keyImage.map( key =>{ 
-            return  (
-              pokemon.sprites[key] && <PictureSprite pictureWidth={picture.width} pictureHeight={picture.height} src={pokemon.sprites[key]} alt={`Foto do ${pokemon.name} - ${key}`} />
-            )})
-          }
-        </PokemonPictureCol>
+        <PokemonPictureCol pokemon={pokemon} configPicture={picture} />
         <PokemonInfoCol>
           <h2>#{pokemon.id} {pokemon.name}</h2>
           <ul>
@@ -96,13 +81,14 @@ export default function Pokemon ({pokemon}) {
             {/* <li><strong>species: </strong>{pokemon.species.length}</li> */}
             {/* <li><strong>stats: </strong>{pokemon.stats.length}</li> */}
             {/* <li><strong>types: </strong>{pokemon.types.length}</li> */}
+            {/* pokemon.base_experience */}
             <li>{pokemon.weight} oz</li>
           </ul>
         </PokemonInfoCol>
       </PokemonBody>
       <PokemonFooter>
-        <p><strong>POWER: </strong>{pokemon.base_experience}</p>
-        <Button>Eu escolho Você</Button>
+        <p><strong>POWER: </strong>{pokemon.power}</p>
+        <Button type="button" onClick={() => addBag(pokemon)}>Eu escolho Você</Button>
       </PokemonFooter>
     </SectionPokemon>
   )

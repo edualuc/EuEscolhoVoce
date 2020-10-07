@@ -1,19 +1,28 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import styled from 'styled-components'
+import { useState } from 'react'
 
+import serviceTypes from '../services/serviceTypes'
 import serviceTypePokemon from '../services/serviceTypePokemon'
 import servicePokemon from '../services/servicePokemon'
 import HtmlHeader from '../components/HtmlHeader/HtmlHeader'
 import Pokemon from '../components/Pokemon/Pokemon'
 import Bag from '../components/Bag/Bag'
+import SummaryBag from '../components/SummaryBag/SummaryBag'
 import Footer from '../components/Footer/Footer'
 
 const Page = styled.div`
   background-color: ${({ theme }) => theme.colors.background};
 `
 const Header = styled.div`
-  background-color: red;
+  background-image: linear-gradient(
+    ${({ theme }) => theme.colors.header.color1}, 
+    ${({ theme }) => theme.colors.header.color2}, 
+    ${({ theme }) => theme.colors.header.color3}, 
+    ${({ theme }) => theme.colors.header.color4}, 
+    ${({ theme }) => theme.colors.header.color5}); 
+;
   height: calc(100px + ${({ theme }) => theme.margin.default}px);
   margin: 0 auto;
   padding: ${({ theme }) => theme.margin.default}px 0px;
@@ -45,7 +54,7 @@ const Main = styled.main`
   border-radius: ${({ theme }) => theme.border.radius}px;
   margin: 0 ${({ theme }) => theme.margin.default}px;
   padding: 0 ${({ theme }) => theme.margin.thin}px;
-  min-width: 480px;
+  min-width: 280px;
   flex: 1;
 `
 const MainTitle = styled.h3`
@@ -58,12 +67,14 @@ const MainTitle = styled.h3`
 const Aside = styled.aside`
   background-color: ${({ theme }) => theme.colors.primary};
   border-radius: ${({ theme }) => theme.border.radius}px;
-  margin: 0 ${({ theme }) => theme.margin.default};
   padding: 0 ${({ theme }) => theme.margin.thin}px;
-  min-width: 300px;
-  max-width: 380px;
-  flex: 1;
+  min-width: 360px;
+  min-height: calc(100vh - 100px - ${({ theme }) => theme.margin.default}px);
+  flex: 0;
   color: ${({ theme }) => theme.colors.light};
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
 `
 const ContainerPokemon = styled.div`
   display: flex;
@@ -71,7 +82,7 @@ const ContainerPokemon = styled.div`
   justify-items: flex-start;
 `
 
-export default function Home(props) {
+function Home (props) {
   const { title, type, pokemons } = props
 
   // const {isFallback} = useRouter();
@@ -80,9 +91,19 @@ export default function Home(props) {
   //   return <>Carregando...</>
   // }
   
-  const bag = {
-    itens: [
-    ],
+  const [bag, setBag] = useState([]);
+  console.log(bag);
+
+  const addBagPokemon = (pokemon) => {
+    setBag(bag.some(value => value.id === pokemon.id) ? bag : [...bag, pokemon]);
+  }
+
+  const removeBagPokemon = (pokemon) => {
+    setBag(bag.reduce((acc, value) => (value.id === pokemon.id ? acc : [...acc, value] ), []));
+  }
+
+  const cleanBagPokemon = (pokemon) => {
+    setBag([]);
   }
 
   return (
@@ -99,14 +120,15 @@ export default function Home(props) {
         <Main>
           <MainTitle>Pokemon do tipo {type}</MainTitle>
           <ContainerPokemon>
-            { pokemons && pokemons.map((pokemon, index) => <Pokemon key={index} pokemon={pokemon} />)}
+            { pokemons && pokemons.map((pokemon, index) => <Pokemon key={index} pokemon={pokemon} addBag={addBagPokemon} />)}
             { !pokemons 
               || !pokemons.length 
               && <span>Não há pokemon para exibir.</span> }
           </ContainerPokemon>
         </Main>
         <Aside>
-          <Bag bag={bag} />
+          <Bag bag={bag} removeBag={removeBagPokemon} />
+          <SummaryBag bag={bag} clearBag={cleanBagPokemon} />
         </Aside>
       </Container>
       
@@ -122,13 +144,13 @@ export async function getStaticProps (props) {
   const listPokemon = await serviceTypePokemon(type)
 
   const pokemons = [];
-  for ( const onePokemon of listPokemon.reduce((acc, pokemon) => (acc.length > 7? acc : [...acc, pokemon]), []) ) {
+  for ( const onePokemon of listPokemon.reduce((acc, pokemon) => (acc.length >= 10? acc : [...acc, pokemon]), []) ) {
     if (onePokemon.pokemon && onePokemon.pokemon.name) {
-      pokemons.push(await servicePokemon(onePokemon.pokemon.name))
+      let pokemonToInclude = await servicePokemon(onePokemon.pokemon.name);
+      pokemonToInclude.power = pokemonToInclude.base_experience
+      pokemons.push(pokemonToInclude)
     }
   }
-
-  // console.log(pokemons && pokemons.map(pokemon => (Object.keys(pokemon))));
 
   return {
     props: {
@@ -140,24 +162,17 @@ export async function getStaticProps (props) {
 }
 
 export async function getStaticPaths () {
-  return {
-    paths: [
-      {
-        params: {
-          type: "fire"
-        }
-      },
-      {
-        params: {
-          type: "water"
-        }
-      },
-      {
-        params: {
-          type: "normal"
-        }
+  const types = await serviceTypes()
+  const paramTypes = types.map(type => (
+    {
+      params: {
+        type: type.type
       }
-    ],
-    fallback: true,
+    }
+  ))
+  return {
+    paths: paramTypes,
+    fallback: false,
   }
 }
+export default Home
