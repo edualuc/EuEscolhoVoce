@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import styled from 'styled-components'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 import serviceTypes from '../services/serviceTypes'
 import serviceTypePokemon from '../services/serviceTypePokemon'
@@ -90,9 +90,12 @@ function Home (props) {
   // if (isFallback) {
   //   return <>Carregando...</>
   // }
+
+  useEffect(() => {
+    props.setTheme(type)
+  }, [type])
   
   const [bag, setBag] = useState([]);
-  console.log(bag);
 
   const addBagPokemon = (pokemon) => {
     setBag(bag.some(value => value.id === pokemon.id) ? bag : [...bag, pokemon]);
