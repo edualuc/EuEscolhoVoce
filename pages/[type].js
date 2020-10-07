@@ -69,6 +69,7 @@ const Aside = styled.aside`
   border-radius: ${({ theme }) => theme.border.radius}px;
   padding: 0 ${({ theme }) => theme.margin.thin}px;
   min-width: 360px;
+  height: min-content;
   min-height: calc(100vh - 100px - ${({ theme }) => theme.margin.default}px);
   flex: 0;
   color: ${({ theme }) => theme.colors.light};
