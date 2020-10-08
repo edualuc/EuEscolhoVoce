@@ -9,6 +9,8 @@ const H3 = styled.h3`
 `
 const PokemonSection = styled.section`
   color: ${({ theme }) => theme.colors.light};
+  max-height: calc(100vh - 200px);
+  overflow-y: auto;
 `
 
 export default function Bag ({bag, removeBag, variant}) {
