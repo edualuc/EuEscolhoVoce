@@ -15,7 +15,7 @@ const serviceTypes = async (typeParam) => {
 let getAllTypes = () => ([
   {
     type: "normal",
-    name: null,
+    name: "Normal",
     path: "/normal",
   }, 
   {
@@ -25,7 +25,7 @@ let getAllTypes = () => ([
   }, 
   {
     type: "flying",
-    name: null,
+    name: "Voador",
     path: "/flying",
   }, 
   {
@@ -100,7 +100,7 @@ let getAllTypes = () => ([
   }, 
   {
     type: "fairy",
-    name: null,
+    name: "Fada",
     path: "/fairy",
   }, 
   {

@@ -7,6 +7,7 @@ import serviceTypes from '../services/serviceTypes'
 import serviceTypePokemon from '../services/serviceTypePokemon'
 import servicePokemon from '../services/servicePokemon'
 import HtmlHeader from '../components/HtmlHeader/HtmlHeader'
+import ChoiceType from '../components/ChoiceType/ChoiceType'
 import Pokemon from '../components/Pokemon/Pokemon'
 import Bag from '../components/Bag/Bag'
 import SummaryBag from '../components/SummaryBag/SummaryBag'
@@ -86,7 +87,7 @@ const ContainerPokemon = styled.div`
 `
 
 function Home (props) {
-  const { title, type, pokemons } = props
+  const { title, type, pokemons, types } = props
 
   // const {isFallback} = useRouter();
 
@@ -119,7 +120,10 @@ function Home (props) {
         <HeaderBody>
           <h1>Pokedex</h1>
 
-          <nav><Link href="/">Escolher Loja</Link></nav>
+          <nav>
+            <ChoiceType widthBase="20" sizeText="0.8" types={types} />
+            <Link href="/">voltar</Link>
+          </nav>
         </HeaderBody>
       </Header>
       <Container>
@@ -146,7 +150,8 @@ function Home (props) {
 export async function getStaticProps (props) {
   const typeId = props.params.type || "padrão"
   
-  const [type] = await serviceTypes(typeId)
+  const types = await serviceTypes()
+  const type = types.find(type => type.type === typeId)
   
   const title = "Lista de pokemons do tipo " + (type && type.name ? type.name : 'desconhecido')
   const listPokemon = type && (await serviceTypePokemon(type.type)) || []
@@ -164,7 +169,8 @@ export async function getStaticProps (props) {
     props: {
       type,
       pokemons,
-      title
+      title,
+      types
     }
   }
 }
