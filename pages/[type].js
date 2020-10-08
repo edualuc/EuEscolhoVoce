@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import styled from 'styled-components'
 import { useState, useEffect } from 'react'
+import Modal from 'react-modal'
 
 import serviceTypes from '../services/serviceTypes'
 import serviceTypePokemon from '../services/serviceTypePokemon'
@@ -12,6 +13,7 @@ import Pokemon from '../components/Pokemon/Pokemon'
 import Bag from '../components/Bag/Bag'
 import SummaryBag from '../components/SummaryBag/SummaryBag'
 import Footer from '../components/Footer/Footer'
+import Button from '../components/Button/Button'
 
 const Page = styled.div`
   background-color: ${({ theme }) => theme.colors.background};
@@ -108,6 +110,37 @@ const Input = styled.input`
   border: 1px dotted ${({ theme }) => theme.colors.backgroundDark};
 `
 
+const ButtonCustom = styled(Button)`
+  background-color: ${({ theme }) => theme.colors.primary};
+  color: ${({ theme }) => theme.colors.light};
+  margin: 2px 8px 4px;
+  padding: 6px 4px;
+  :hover {
+    background-color: ${({ theme }) => theme.colors.secondary};
+  }
+`
+
+const customStyles = {
+  content : {
+    top                   : '50%',
+    left                  : '50%',
+    right                 : 'auto',
+    bottom                : 'auto',
+    marginRight           : '-50%',
+    transform             : 'translate(-50%, -50%)'
+  }
+};
+
+const ModalActions = styled.div`
+  margin: 30px 10px 10px;
+`
+
+const H2 = styled.h2`
+  color: ${({ theme }) => theme.colors.dark};
+  font-size: ${({ theme }) => theme.font.title};
+`
+
+
 function Home (props) {
   const { title, type, pokemons, types } = props
 
@@ -123,7 +156,14 @@ function Home (props) {
   
   const [bag, setBag] = useState([]);
   const [filterName, setFilterName] = useState("");
+  const [modalIsOpen,setIsOpen] = useState(false);
   
+  function openModal() {
+    setIsOpen(true);
+  }
+  function closeModal(){
+    setIsOpen(false);
+  }
   const addBagPokemon = (pokemon) => {
     setBag(bag.some(value => value.id === pokemon.id) ? bag : [...bag, pokemon]);
   }
@@ -134,6 +174,7 @@ function Home (props) {
 
   const cleanBagPokemon = (pokemon) => {
     setBag([]);
+    closeModal();
   }
   
   const setFilterNamePokemon = (event) => {
@@ -155,7 +196,7 @@ function Home (props) {
       <Container>
         <Aside>
           <Bag bag={bag} removeBag={removeBagPokemon} />
-          <SummaryBag bag={bag} clearBag={cleanBagPokemon} />
+          <SummaryBag bag={bag} catchThem={openModal} />
         </Aside>
         <Main>
           <MainTitle>Pokemon do tipo: {type.name}</MainTitle>
@@ -171,6 +212,21 @@ function Home (props) {
           </ContainerPokemon>
         </Main>
       </Container>
+
+      <Modal
+        isOpen={modalIsOpen}
+        // onAfterOpen={afterOpenModal}
+        onRequestClose={closeModal}
+        style={customStyles}
+        contentLabel="Finalizar Compra">
+          <H2>Confirme os pokemon escolhidos para levar com você</H2>
+          <Bag variant="notitle" bag={bag} />
+
+          <ModalActions>
+            <Button onClick={closeModal}>Escolher Outros</Button>
+            <ButtonCustom onClick={cleanBagPokemon}>Confirmar Pokemon</ButtonCustom>
+          </ModalActions>
+      </Modal>
       
       <Footer />
     </Page>

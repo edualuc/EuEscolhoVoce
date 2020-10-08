@@ -63,7 +63,9 @@ function PokemonBag({pokemon, removeBag}) {
           <H2>#{pokemon.id} {pokemon.name}</H2>
           <p><strong>FORÇA: </strong>{pokemon.base_experience}</p>
         </PokemonInfoCol>
-        <Button type="button" onClick={() => removeBag(pokemon)}><IconTrash /></Button>
+        { 
+          removeBag && <Button type="button" onClick={() => removeBag(pokemon)}><IconTrash /></Button>
+        }
       </PokemonBody>
     </SectionPokemon>
   );

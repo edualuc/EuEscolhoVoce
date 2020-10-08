@@ -7,14 +7,19 @@ const H3 = styled.h3`
   color: ${({theme}) => theme.colors.light}rem;
   margin: 20px 10px;
 `
+const PokemonSection = styled.section`
+  color: ${({ theme }) => theme.colors.light};
+`
 
-export default function Bag ({bag, removeBag}) {
+export default function Bag ({bag, removeBag, variant}) {
   return (
-    <section>
-      <H3>Bolsa de Pokemon</H3>
+    <PokemonSection>
+      {
+        variant !== 'notitle' && <H3>Bolsa de Pokemon</H3>
+      }
       {
         bag && bag.map((pokemon, index) => <PokemonBag key={index} pokemon={pokemon} removeBag={removeBag} />)
       }
-    </section>
+    </PokemonSection>
   )
 }

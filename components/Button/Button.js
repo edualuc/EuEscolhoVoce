@@ -8,10 +8,13 @@ const ButtonCustom = styled.button`
   border: none;
   border-radius: 4px;
   font-weight: bold;
-
   :hover {
     background-color: ${({ theme }) => theme.colors.backgroundDark};
     cursor: pointer;
+  }
+  :disabled {
+    background-color: ${({ theme }) => theme.colors.backgroundLight};
+    cursor: initial;
   }
 `
 

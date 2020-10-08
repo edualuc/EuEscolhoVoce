@@ -8,6 +8,7 @@ const Summary = styled.div`
   align-items: center;
   margin: ${({theme}) => theme.margin.default}px ${({theme}) => theme.margin.thin}px;
   font-size: ${({theme}) => theme.font.title2}rem;
+  color: ${({ theme }) => theme.colors.light};
 `
 
 const Power = styled.strong`
@@ -24,10 +25,10 @@ const PowerField = styled.div`
 `
 
 
-function SummaryBag({bag, clearBag}) {
+function SummaryBag({bag, catchThem}) {
   return (
     <Summary>
-      <Button onClick={clearBag}>PEGAR ELES</Button>
+      <Button onClick={catchThem} disabled={!bag || !bag.length}>PEGAR ELES</Button>
       <PowerField>
         <span>Força Total:</span> {' '}
         <Power>{

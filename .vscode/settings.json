@@ -3,5 +3,8 @@
     "pokedex",
     "pokemons"
   ],
-  "cSpell.language": "en,pt,pt-BR"
+  "cSpell.language": "en,pt,pt-BR",
+  "cSpell.ignoreWords": [
+    "boxicons"
+  ]
 }
