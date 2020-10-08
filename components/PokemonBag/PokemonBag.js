@@ -15,20 +15,21 @@ const PokemonBody = styled.div`
   filter: brightness(110%);
   padding-right: 8px;
   font-size: ${({ theme }) => theme.font.body}rem;
-  * > h2 {
-    font-size: ${({ theme }) => theme.font.title2}rem;
-  }
 `
 
 const PokemonInfoCol = styled.div`
   flex: 1;
-  > h2 {
-    margin: 3px 0;
-  };
+  
   > ul {
     margin: auto 0;
   }
 `
+const H2 = styled.h2`
+  margin: 3px 0;
+  font-size: ${({ theme }) => theme.font.title2}rem;
+  color: ${({ theme }) => theme.colors.light};
+`
+
 
 const Button = styled.div`
   background-color: ${({ theme }) => theme.colors.backgroundLight};
@@ -59,8 +60,8 @@ function PokemonBag({pokemon, removeBag}) {
       <PokemonBody>
         <PokemonPictureCol pokemon={pokemon} configPicture={picture} />
         <PokemonInfoCol>
-          <h2>#{pokemon.id} {pokemon.name}</h2>
-          <p><strong>POWER: </strong>{pokemon.base_experience}</p>
+          <H2>#{pokemon.id} {pokemon.name}</H2>
+          <p><strong>FORÇA: </strong>{pokemon.base_experience}</p>
         </PokemonInfoCol>
         <Button type="button" onClick={() => removeBag(pokemon)}><IconTrash /></Button>
       </PokemonBody>

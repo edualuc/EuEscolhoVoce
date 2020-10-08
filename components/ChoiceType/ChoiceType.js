@@ -7,10 +7,11 @@ import { Dragon } from '@styled-icons/fa-solid/Dragon'
 import { Freelancer } from '@styled-icons/simple-icons/Freelancer'
 import { Bug } from '@styled-icons/ionicons-sharp/Bug'
 import { Magic } from '@styled-icons/remix-fill/Magic'
+import { Baidu } from '@styled-icons/boxicons-logos/Baidu'
 import themes, { themeDefault } from '../../styles/themes'
 
 const IconTypes = {
-  default: styled(Pokemon)`
+  default: styled(Baidu)`
   color: ${({ type }) => (
     themes[type] 
       ? themes[type].colors.primary 
@@ -72,7 +73,7 @@ const IconTypes = {
 const Types = styled.ul`
   display: flex;
   justify-content: center;
-  align-content: center;
+  align-items: center;
   flex-wrap: wrap;
 `
 const Type = styled.li`
@@ -80,22 +81,28 @@ const Type = styled.li`
   text-align: center;
   font-size: ${({ sizeText }) => (sizeText)}rem;
   font-weight: bold;
-  margin: ${({ widthBase }) => (widthBase)}px ${({ widthBase }) => (widthBase)}px 0;
+  margin: ${({ widthBase }) => (widthBase)}px ${({ widthBase }) => (widthBase)}px 9px;
   background-color: rgba(255, 255, 255, 0.2);
   border-radius: calc(${({ theme }) => theme.border.radius}px / 4);
+  cursor: pointer;
 `
 
-const ChoiceType = ({types, widthBase, sizeText}) => {
+const ChoiceType = ({types, widthBase, sizeText, Back}) => {
   return (
     <Types>
       {types && types.map(type => {
         const Icon = IconTypes[type.type] || IconTypes['default']
         return (
-        <Type widthBase={widthBase} sizeText={sizeText} key={type.name}><Link href={type.path}>
-          <div><Icon type={type.type} /> <span>{type.name}</span></div>
-        </Link></Type>
+          <Link href={type.path}><Type widthBase={widthBase} sizeText={sizeText} key={type.name}>
+          <span><Icon type={type.type} /> {type.name}</span>
+        </Type></Link>
         )
       })}
+      {Back && (
+        <Type widthBase={widthBase} sizeText={sizeText}>
+          <Back />
+        </Type>
+      )}
     </Types>
   )
 }

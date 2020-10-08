@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 
 import PokemonPictureCol from '../PokemonPictureCol/PokemonPictureCol'
+import Button from '../Button/Button'
 
 const SectionPokemon = styled.section`
   flex: 1;
@@ -34,6 +35,7 @@ const PokemonFooter = styled.div`
 
 const PokemonInfoCol = styled.div`
   flex: 1;
+  color: ${({ theme }) => theme.colors.dark};
   > h2 {
     margin: 3px 0;
   };
@@ -42,16 +44,13 @@ const PokemonInfoCol = styled.div`
   }
 `
 
-const Button = styled.div`
+const ButtonCustom = styled(Button)`
   background-color: ${({ theme }) => theme.colors.primary};
   color: ${({ theme }) => theme.colors.light};
-  width: 100%;
   margin: 2px 8px 4px;
   padding: 6px 4px;
-  border-radius: 4px;
   :hover {
     background-color: ${({ theme }) => theme.colors.secondary};
-    cursor: pointer;
   }
 `
 
@@ -87,8 +86,8 @@ export default function Pokemon ({pokemon, addBag}) {
         </PokemonInfoCol>
       </PokemonBody>
       <PokemonFooter>
-        <p><strong>POWER: </strong>{pokemon.power}</p>
-        <Button type="button" onClick={() => addBag(pokemon)}>Eu escolho Você</Button>
+        <p><strong>Força: </strong>{pokemon.power}</p>
+        <ButtonCustom type="button" onClick={() => addBag(pokemon)}>Eu escolho Você</ButtonCustom>
       </PokemonFooter>
     </SectionPokemon>
   )
