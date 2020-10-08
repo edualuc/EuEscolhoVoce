@@ -40,6 +40,9 @@ const HeaderBody = styled.div`
   align-items: center;
   justify-content: space-between;
   height: 100%;
+  > h1 {
+    margin-right: 15px;
+  }
 `
 const Container = styled.div`
   max-width: ${({ theme }) => theme.maxWidth}px;
