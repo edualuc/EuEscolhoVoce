@@ -15,6 +15,7 @@ import Footer from '../components/Footer/Footer'
 
 const Page = styled.div`
   background-color: ${({ theme }) => theme.colors.background};
+  height: 100vh;
 `
 const Header = styled.div`
   background-image: linear-gradient(
@@ -24,7 +25,7 @@ const Header = styled.div`
     ${({ theme }) => theme.colors.header.color4}, 
     ${({ theme }) => theme.colors.header.color5}); 
 ;
-  height: calc(100px + ${({ theme }) => theme.margin.default}px);
+  min-height: calc(100px + ${({ theme }) => theme.margin.default}px);
   margin: 0 auto;
   padding: ${({ theme }) => theme.margin.default}px 0px;
   color: ${({ theme }) => theme.colors.light};
@@ -33,6 +34,7 @@ const Header = styled.div`
 `
 const HeaderBody = styled.div`
   max-width: ${({ theme }) => theme.maxWidth}px;
+  padding: 0 10px;
   flex: 1;
   display: flex;
   align-items: center;
@@ -85,6 +87,23 @@ const ContainerPokemon = styled.div`
   flex-wrap: wrap;
   justify-items: flex-start;
 `
+const Filters = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+`
+const Label = styled.label`
+  margin: 0 0  ${({ theme }) => theme.margin.thin}px ${({ theme }) => theme.margin.thin}px;
+  color: ${({ theme }) => theme.colors.dark};
+  font-size: ${({ theme }) => theme.font.body}rem;
+`
+const Input = styled.input`
+  flex: 2;
+  margin: 0 ${({ theme }) => theme.margin.thin}px  ${({ theme }) => theme.margin.thin}px 10px;
+  padding: 7px;
+  background-color: ${({ theme }) => theme.colors.background};
+  border: 1px dotted ${({ theme }) => theme.colors.backgroundDark};
+`
 
 function Home (props) {
   const { title, type, pokemons, types } = props
@@ -100,7 +119,8 @@ function Home (props) {
   }, [type])
   
   const [bag, setBag] = useState([]);
-
+  const [filterName, setFilterName] = useState("");
+  
   const addBagPokemon = (pokemon) => {
     setBag(bag.some(value => value.id === pokemon.id) ? bag : [...bag, pokemon]);
   }
@@ -112,6 +132,10 @@ function Home (props) {
   const cleanBagPokemon = (pokemon) => {
     setBag([]);
   }
+  
+  const setFilterNamePokemon = (event) => {
+    setFilterName(event.target.value);
+  }
 
   return (
     <Page>
@@ -121,8 +145,7 @@ function Home (props) {
           <h1>Pokedex</h1>
 
           <nav>
-            <ChoiceType widthBase="20" sizeText="0.8" types={types} />
-            <Link href="/">voltar</Link>
+            <ChoiceType widthBase="20" sizeText="0.8" types={types} Back={() => <Link href="/">voltar</Link>} />
           </nav>
         </HeaderBody>
       </Header>
@@ -133,8 +156,12 @@ function Home (props) {
         </Aside>
         <Main>
           <MainTitle>Pokemon do tipo: {type.name}</MainTitle>
+          <Filters><Label htmlFor="filterName">Buscar por nome:</Label>{" "}<Input onChange={setFilterNamePokemon} value={filterName} type="text" placeholder="Digite um nome para filtrar" /></Filters>
           <ContainerPokemon>
-            { pokemons && pokemons.map((pokemon, index) => <Pokemon key={index} pokemon={pokemon} addBag={addBagPokemon} />)}
+            { pokemons 
+              && pokemons.filter(pokemon => (pokemon.name.match(new RegExp('^'+filterName, 'i')) || !filterName))
+                  .map((pokemon, index) => <Pokemon key={index} pokemon={pokemon} addBag={addBagPokemon} />)
+            }
             { !pokemons 
               || !pokemons.length 
               && <span>Não há pokemon para exibir.</span> }
@@ -157,7 +184,7 @@ export async function getStaticProps (props) {
   const listPokemon = type && (await serviceTypePokemon(type.type)) || []
 
   const pokemons = [];
-  for ( const onePokemon of listPokemon.reduce((acc, pokemon) => (process.env.NODE_ENV !== 'production' && acc.length >= 10? acc : [...acc, pokemon]), []) ) {
+  for ( const onePokemon of listPokemon.reduce((acc, pokemon) => (process.env.NODE_ENV !== 'production' && acc.length >= 6? acc : [...acc, pokemon]), []) ) {
     if (onePokemon.pokemon && onePokemon.pokemon.name) {
       let pokemonToInclude = await servicePokemon(onePokemon.pokemon.name);
       pokemonToInclude.power = pokemonToInclude.base_experience
