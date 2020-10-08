@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-
+import { TrashAlt } from '@styled-icons/boxicons-solid/TrashAlt'
 import PokemonPictureCol from '../PokemonPictureCol/PokemonPictureCol'
 
 const SectionPokemon = styled.section`
@@ -44,6 +44,11 @@ const Button = styled.div`
   }
 `
 
+const IconTrash = styled(TrashAlt)`
+  width: 16px;
+  height: 16px;
+`
+
 function PokemonBag({pokemon, removeBag}) {
   const picture = { 
     width: 75,
@@ -57,7 +62,7 @@ function PokemonBag({pokemon, removeBag}) {
           <h2>#{pokemon.id} {pokemon.name}</h2>
           <p><strong>POWER: </strong>{pokemon.base_experience}</p>
         </PokemonInfoCol>
-        <Button type="button" onClick={() => removeBag(pokemon)}>Ex</Button>
+        <Button type="button" onClick={() => removeBag(pokemon)}><IconTrash /></Button>
       </PokemonBody>
     </SectionPokemon>
   );
