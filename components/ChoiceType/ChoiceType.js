@@ -81,25 +81,25 @@ const Type = styled.li`
   text-align: center;
   font-size: ${({ sizeText }) => (sizeText)}rem;
   font-weight: bold;
-  margin: ${({ widthBase }) => (widthBase)}px ${({ widthBase }) => (widthBase)}px 9px;
+  margin: ${({ widthBase }) => (widthBase)}px ${({ variant, widthBase }) => (variant === 'condensed' ? 6 : widthBase)}px 9px;
   background-color: rgba(255, 255, 255, 0.2);
   border-radius: calc(${({ theme }) => theme.border.radius}px / 4);
   cursor: pointer;
 `
 
-const ChoiceType = ({types, widthBase, sizeText, Back}) => {
+const ChoiceType = ({types, widthBase, sizeText, Back, variant}) => {
   return (
     <Types>
       {types && types.map(type => {
         const Icon = IconTypes[type.type] || IconTypes['default']
         return (
-          <Link href={type.path}><Type widthBase={widthBase} sizeText={sizeText} key={type.name}>
+          <Link href={type.path}><Type variant={variant} widthBase={widthBase} sizeText={sizeText} key={type.name}>
           <span><Icon type={type.type} /> {type.name}</span>
         </Type></Link>
         )
       })}
       {Back && (
-        <Type widthBase={widthBase} sizeText={sizeText}>
+        <Type variant={variant} widthBase={widthBase} sizeText={sizeText}>
           <Back />
         </Type>
       )}

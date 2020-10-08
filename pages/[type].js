@@ -148,7 +148,7 @@ function Home (props) {
           <h1>Pokedex</h1>
 
           <nav>
-            <ChoiceType widthBase="20" sizeText="0.8" types={types} Back={() => <Link href="/">voltar</Link>} />
+            <ChoiceType variant="condensed" widthBase="20" sizeText="0.8" types={types} Back={() => <Link href="/">voltar</Link>} />
           </nav>
         </HeaderBody>
       </Header>
